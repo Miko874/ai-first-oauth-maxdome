@@ -1,0 +1,42 @@
+{
+  "private": true,
+  "name": "ai-oauth-maxdome",
+  "version": "1.0.0",
+  "description": "",
+  "license": "UNLICENSED",
+  "homepage": "http://github.com/dragonprojects/ai-oauth-maxdome",
+  "author": {
+    "name": "Sharaal",
+    "email": "developer@dragonprojects.de",
+    "url": "http://dragonprojects.de"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dragonprojects/ai-oauth-maxdome.git"
+  },
+  "readmeFilename": "README.md",
+  "scripts": {
+    "develop": "nodemon src/web.js",
+    "lint": "eslint src",
+    "start": "node src/web.js"
+  },
+  "engines": {
+    "node": "7.6.x"
+  },
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "dcontrollers": "^1.1.0",
+    "dexpress": "^2.0.1",
+    "dotenv": "^4.0.0",
+    "dredis": "^2.0.0",
+    "drequest-maxdome": "^2.1.1",
+    "i18n": "^0.8.3",
+    "lodash": "^4.17.4",
+    "shortid": "^2.2.8"
+  },
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-dnode": "^1.8.0",
+    "nodemon": "^1.11.0"
+  }
+}
