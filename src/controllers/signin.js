@@ -6,15 +6,13 @@ module.exports = ({ maxdome, redis }) => [
   }]],
   ['post', ['/signin', require('body-parser').urlencoded({ extended: false }), async (req, res) => {
     try {
-      const data =
-        await maxdome.request()
-          .post('v1/auth/login', {
-            body: {
-              userId: req.body.email,
-              phrase: req.body.password,
-              autoLogin: true,
-            },
-          });
+      const data = await maxdome.post('v1/auth/login', {
+        body: {
+          userId: req.body.email,
+          phrase: req.body.password,
+          autoLogin: true,
+        },
+      });
       const token = shortid.generate();
       const linkedAccount = {
         autoLoginPin: data.autoLoginPin,

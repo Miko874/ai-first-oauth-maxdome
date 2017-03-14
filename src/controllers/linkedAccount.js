@@ -12,14 +12,12 @@ module.exports = ({ maxdome, redis }) => [
         throw new Error('incorrect token');
       }
       try {
-        await maxdome.request()
-          .post('v1/auth/keepalive', new SessionOptions(linkedAccount));
+        await maxdome.post('v1/auth/keepalive', new SessionOptions(linkedAccount));
         res.status(200).send(linkedAccount);
       } catch (e) {
-        const data = await maxdome.request()
-          .post('v1/autologin_portal', {
-            body: { autoLoginPin: linkedAccount.autoLoginPin },
-          });
+        const data = await maxdome.post('v1/autologin_portal', {
+          body: { autoLoginPin: linkedAccount.autoLoginPin },
+        });
         const newLinkedAccount = {
           autoLoginPin: data.autoLoginPin,
           customer: { customerId: data.customer.customerId },
