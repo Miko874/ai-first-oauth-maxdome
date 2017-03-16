@@ -13,14 +13,14 @@ module.exports = ({ maxdome, redis }) => [
           autoLogin: true,
         },
       });
-      const token = shortid.generate();
+      const accessToken = shortid.generate();
       const linkedAccount = {
         autoLoginPin: data.autoLoginPin,
         customer: { customerId: data.customer.customerId },
         sessionId: data.sessionId,
       };
-      await redis.setJSON(token, linkedAccount);
-      res.status(200).send({ token });
+      await redis.setJSON(accessToken, linkedAccount);
+      res.status(200).send({ accessToken });
     } catch (e) {
       res.status(403).send();
     }

@@ -3,13 +3,13 @@ const SessionOptions = require('drequest-maxdome').SessionOptions;
 module.exports = ({ maxdome, redis }) => [
   ['post', ['/linkedAccount', require('body-parser').json(), async (req, res) => {
     try {
-      const token = req.body.token;
-      if (!token) {
-        throw new Error('missing token');
+      const accessToken = req.body.accessToken;
+      if (!accessToken) {
+        throw new Error('missing accessToken');
       }
-      const linkedAccount = await redis.getJSON(token);
+      const linkedAccount = await redis.getJSON(accessToken);
       if (!linkedAccount) {
-        throw new Error('incorrect token');
+        throw new Error('incorrect accessToken');
       }
       try {
         await maxdome.post('v1/auth/keepalive', new SessionOptions(linkedAccount));
@@ -23,7 +23,7 @@ module.exports = ({ maxdome, redis }) => [
           customer: { customerId: data.customer.customerId },
           sessionId: data.sessionId,
         };
-        await redis.setJSON(token, newLinkedAccount);
+        await redis.setJSON(accessToken, newLinkedAccount);
         res.status(200).send(newLinkedAccount);
       }
     } catch (e) {
