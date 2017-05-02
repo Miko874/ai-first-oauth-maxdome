@@ -1,6 +1,6 @@
 require('dotenv').config({ silent: true });
 
-const { app } = require('dexpress');
+const app = require('dexpress')();
 
 const maxdome = require('drequest-maxdome').getRequestBuilder();
 const redis = require('dredis')(process.env.REDIS_URL);
