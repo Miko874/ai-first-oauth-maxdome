@@ -25,9 +25,9 @@
   },
   "dependencies": {
     "body-parser": "^1.16.0",
-    "dcontrollers": "^1.1.0",
+    "dcontrollers": "^1.4.0",
     "dexpress": "^3.0.0",
-    "dotenv": "^4.0.0",
+    "dotenv-safe": "^4.0.3",
     "dredis": "^2.0.0",
     "drequest-maxdome": "^2.3.3",
     "i18n": "^0.8.3",
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "eslint": "^3.15.0",
-    "eslint-config-dnode": "^1.8.0",
+    "eslint-config-dnode": "^1.10.0",
     "nodemon": "^1.11.0"
   }
 }

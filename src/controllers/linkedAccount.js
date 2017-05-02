@@ -1,6 +1,6 @@
 const SessionOptions = require('drequest-maxdome').SessionOptions;
 
-module.exports = ({ maxdome, redis }) => [
+module.exports = ({ maxdome, redis }) =>
   ['post', ['/linkedAccount', require('body-parser').json(), async (req, res) => {
     try {
       const accessToken = req.body.accessToken;
@@ -29,5 +29,4 @@ module.exports = ({ maxdome, redis }) => [
     } catch (e) {
       res.status(403).send();
     }
-  }]],
-];
+  }]];
