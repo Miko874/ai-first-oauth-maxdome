@@ -7,7 +7,7 @@ OAuth 2.0 connector for the implicit workflow which generates tokens for stored 
 
 ## Setup for `api.ai`
 
-![](https://github.com/dragonprojects/ai-oauth-maxdome/docs/api.ai.png)
+![](https://raw.githubusercontent.com/dragonprojects/ai-oauth-maxdome/master/docs/api.ai.png)
 
 * `Client ID` and `Client Secret` will be ignored
 * Supported `Grant type` is `Implicit`
@@ -26,7 +26,7 @@ const linkedAccount = async (accessToken) => {
 };
 ```
 
-## `linkedAccount` structure
+### `linkedAccount` structure
 
 ```javascript
 const linkedAccount = {
