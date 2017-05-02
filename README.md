@@ -3,6 +3,7 @@
 
 OAuth 2.0 connector for the implicit workflow which generates tokens for stored maxdome sessions and provide getting customer information. 
 
+
 # Documentation
 
 ## Setup for `api.ai`
