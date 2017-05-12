@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>maxdome</title>
+
+  <link href="vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      padding-top: 40px;
+      padding-bottom: 40px;
+      background-color: #eee;
+    }
+    .form-signin {
+      max-width: 330px;
+      padding: 15px;
+      margin: 0 auto;
+    }
+    .form-signin .form-signin-heading,
+    .form-signin {
+      margin-bottom: 10px;
+    }
+    .form-signin .checkbox {
+      font-weight: normal;
+    }
+    .form-signin .form-control {
+      position: relative;
+      height: auto;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .form-signin .form-control:focus {
+      z-index: 2;
+    }
+    .form-signin input[type="email"] {
+      margin-bottom: -1px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .form-signin input[type="password"] {
+      margin-bottom: 10px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <form id="form-signin" class="form-signin">
+    <h2 class="form-signin-heading">maxdome</h2>
+    <label for="inputEmail" class="sr-only">E-Mail</label>
+    <input type="email" id="inputEmail" class="form-control" placeholder="E-Mail" value="asd@asd.de" required autofocus>
+    <label for="inputPassword" class="sr-only">Passwort</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Passwort" value="asd" required>
+    <button id="btnSubmit" class="btn btn-lg btn-primary btn-block" type="submit">Anmelden</button>
+    <span id="helpBlock" class="help-block hidden"></span>
+  </form>
+  <pre id="debug" class="hidden"></pre>
+</div>
+
+<script src="vendor/jquery/dist/jquery.min.js"></script>
+<script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="vendor/urijs/src/URI.min.js"></script>
+
+<script>
+  $(function () {
+    var search = URI().search(true);
+
+    function form(elements, handler) {
+      function debug(text, context) {
+        if (search.debug === undefined) {
+          return;
+        }
+        elements.debug.removeClass();
+        if (context) {
+          elements.debug.addClass('bg-' + context);
+        }
+        if (typeof text === 'object') {
+          text = JSON.stringify(text, null, 4);
+        }
+        elements.debug.text(text);
+      }
+      elements.form.submit(function (event) {
+        event.preventDefault();
+        elements.btnSubmit.attr('disabled', 'disabled');
+        elements.helpBlock.addClass('hidden');
+        elements.form.removeClass('has-error');
+        debug('...');
+        handler(function (err, data) {
+          elements.btnSubmit.removeAttr('disabled');
+          if (err) {
+            elements.helpBlock
+              .text(err.text)
+              .removeClass('hidden');
+            elements.form.addClass('has-error');
+            debug(err.jqXHR.responseText, 'danger');
+          } else {
+            debug(data, 'success');
+          }
+        });
+      });
+    }
+
+    form(
+      {
+        btnSubmit: $('#btnSubmit'),
+        debug: $('#debug'),
+        form: $('#form-signin'),
+        helpBlock: $('#helpBlock'),
+      },
+      function (callback) {
+        $.post('/signin', { email: $('#inputEmail').val(), password: $('#inputPassword').val() })
+          .done(function (data) {
+            if (search.redirect_uri && search.state) {
+              var hash = URI('')
+                .search({
+                  state: search.state,
+                  access_token: data.accessToken,
+                  token_type: 'Bearer'
+                })
+                .query();
+              window.location = URI(search.redirect_uri).hash(hash).toString();
+            } else {
+              callback(null, data);
+            }
+          })
+          .fail(function (jqXHR) {
+            let text;
+            if (jqXHR.status === 403) {
+              text = 'E-Mail oder Passwort falsch.';
+            } else {
+              text = 'Unbekannter Fehler, bitte versuchen Sie es später nochmal.';
+            }
+            callback({ jqXHR: jqXHR, text: text });
+          });
+      }
+    );
+  });
+</script>
+</body>
+</html>

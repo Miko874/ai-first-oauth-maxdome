@@ -1,8 +1,9 @@
+const path = require('path');
 const shortid = require('shortid');
 
 module.exports = ({ maxdome, redis }) => [
   ['get', ['/signin', async (req, res) => {
-    res.sendFile('signin.html', { root: `${__dirname}/../../views/` });
+    res.sendFile('signin.html', { root: path.join(process.cwd(), 'www') });
   }]],
   ['post', ['/signin', require('body-parser').urlencoded({ extended: false }), async (req, res) => {
     try {
@@ -22,7 +23,7 @@ module.exports = ({ maxdome, redis }) => [
       await redis.setJSON(accessToken, linkedAccount);
       res.status(200).send({ accessToken });
     } catch (e) {
-      res.status(403).send();
+      res.status(403).send(e.message);
     }
   }]],
 ];
