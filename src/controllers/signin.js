@@ -5,7 +5,7 @@ module.exports = ({ maxdome, redis }) => [
   ['get', ['/signin', async (req, res) => {
     res.sendFile('signin.html', { root: path.join(process.cwd(), 'www') });
   }]],
-  ['post', ['/signin', require('body-parser').urlencoded({ extended: false }), async (req, res) => {
+  ['post', ['/signin', async (req, res) => {
     try {
       const data = await maxdome.post('v1/auth/login', {
         body: {
