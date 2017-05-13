@@ -23,7 +23,8 @@ const linkedAccount = async (accessToken) => {
   if (!accessToken) {
     return;
   }
-  return await new Request().post('https://ai-oauth-maxdome.herokuapp.com/linkedAccount', { body: { accessToken } });
+  const data = await new Request().post('https://ai-oauth-maxdome.herokuapp.com/linkedAccount', { body: { accessToken } });
+  return data.linkedAccount;
 };
 ```
 

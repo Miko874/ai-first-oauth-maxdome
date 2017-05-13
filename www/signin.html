@@ -130,7 +130,11 @@
                 .query();
               window.location = URI(search.redirect_uri).hash(hash).toString();
             } else {
-              callback(null, data);
+              const accessToken = data.accessToken;
+              $.post('/linkedAccount', { accessToken: accessToken })
+                .done(function (data) {
+                  callback(null, { accessToken: accessToken, linkedAccount: data.linkedAccount });
+                });
             }
           })
           .fail(function (jqXHR) {
