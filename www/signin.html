@@ -107,16 +107,16 @@
       formElement.removeClass('has-error');
       eventEmitter.trigger('submit');
       $[formElement.attr('method')](formElement.attr('action'), formData)
-          .always(function () {
-            submitElement.removeAttr('disabled', 'disabled');
-          })
-          .done(function (data) {
-            eventEmitter.trigger('done', data);
-          })
-          .fail(function (jqXHR) {
-            formElement.addClass('has-error');
-            eventEmitter.trigger('fail', jqXHR);
-          });
+        .always(function () {
+          submitElement.removeAttr('disabled', 'disabled');
+        })
+        .done(function (data) {
+          eventEmitter.trigger('done', data);
+        })
+        .fail(function (jqXHR) {
+          formElement.addClass('has-error');
+          eventEmitter.trigger('fail', jqXHR);
+        });
     });
     return eventEmitter;
   }
