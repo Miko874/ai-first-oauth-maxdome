@@ -98,10 +98,9 @@
       $.each(inputElements, function (_, element) {
         element = $(element);
         var name = element.attr('name');
-        if (!name) {
-          return;
+        if (name) {
+          formData[name] = element.val();
         }
-        formData[name] = element.val();
       });
       submitElement.attr('disabled', 'disabled');
       formElement.removeClass('has-error');
@@ -158,6 +157,15 @@
     }
 
     if (search.debug !== undefined) {
+      var element = $('#search');
+      element
+          .text(JSON.stringify(search, null, 4))
+          .removeClass();
+      if (search.redirect_uri && search.state) {
+        element.addClass('bg-success');
+      } else {
+        element.addClass('bg-warning');
+      }
       function debug(text, context) {
         if (search.debug === undefined) {
           return;
@@ -186,15 +194,6 @@
         .on('fail', function (jqXHR) {
           debug(jqXHR.responseText, 'danger');
         });
-      var element = $('#search');
-      element
-        .text(JSON.stringify(search, null, 4))
-        .removeClass();
-      if (search.redirect_uri && search.state) {
-        element.addClass('bg-success');
-      } else {
-        element.addClass('bg-warning');
-      }
     }
   });
 </script>
