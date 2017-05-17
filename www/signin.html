@@ -130,6 +130,18 @@
   $(function () {
     var search = URI().search(true);
 
+    if (search.debug !== undefined) {
+      var element = $('#search');
+      element
+        .text(JSON.stringify(search, null, 4))
+        .removeClass();
+      if (search.redirect_uri && search.state) {
+        element.addClass('bg-success');
+      } else {
+        element.addClass('bg-warning');
+      }
+    }
+
     var eventEmitter = formHandler('#formSignin');
 
     eventEmitter
@@ -164,15 +176,6 @@
     }
 
     if (search.debug !== undefined) {
-      var element = $('#search');
-      element
-        .text(JSON.stringify(search, null, 4))
-        .removeClass();
-      if (search.redirect_uri && search.state) {
-        element.addClass('bg-success');
-      } else {
-        element.addClass('bg-warning');
-      }
       function debug(text, context) {
         if (search.debug === undefined) {
           return;
