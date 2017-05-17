@@ -64,6 +64,7 @@
     <button id="btnSubmit" class="btn btn-lg btn-primary btn-block" type="submit">Anmelden</button>
     <span id="helpBlock" class="help-block hidden"></span>
   </form>
+  <pre id="search" class="hidden"></pre>
   <pre id="debug" class="hidden"></pre>
 </div>
 
@@ -73,28 +74,30 @@
 
 <script>
   $(function () {
+    var eventEmitter = {
+      on: function (name, handler) {
+        this[name] = this[name] || [];
+        this[name].push(handler);
+      },
+      trigger: function (name, args) {
+        if (!this[name]) {
+          return;
+        }
+        this[name].map(function (handler) {
+          handler.apply(this, args);
+        });
+      },
+    };
+
     var search = URI().search(true);
 
     function form(elements, handler) {
-      function debug(text, context) {
-        if (search.debug === undefined) {
-          return;
-        }
-        elements.debug.removeClass();
-        if (context) {
-          elements.debug.addClass('bg-' + context);
-        }
-        if (typeof text === 'object') {
-          text = JSON.stringify(text, null, 4);
-        }
-        elements.debug.text(text);
-      }
       elements.form.submit(function (event) {
         event.preventDefault();
         elements.btnSubmit.attr('disabled', 'disabled');
         elements.helpBlock.addClass('hidden');
         elements.form.removeClass('has-error');
-        debug('...');
+        eventEmitter.trigger('submit');
         handler(function (err, data) {
           elements.btnSubmit.removeAttr('disabled');
           if (err) {
@@ -102,10 +105,8 @@
               .text(err.text)
               .removeClass('hidden');
             elements.form.addClass('has-error');
-            debug(err.jqXHR.responseText, 'danger');
-          } else {
-            debug(data, 'success');
           }
+          eventEmitter.trigger('handled', [err, data]);
         });
       });
     }
@@ -113,28 +114,24 @@
     form(
       {
         btnSubmit: $('#btnSubmit'),
-        debug: $('#debug'),
         form: $('#form-signin'),
         helpBlock: $('#helpBlock'),
       },
       function (callback) {
         $.post('/signin', { email: $('#inputEmail').val(), password: $('#inputPassword').val() })
           .done(function (data) {
+            var accessToken = data.accessToken;
             if (search.redirect_uri && search.state) {
               var hash = URI('')
                 .search({
                   state: search.state,
-                  access_token: data.accessToken,
+                  access_token: accessToken,
                   token_type: 'Bearer'
                 })
                 .query();
               window.location = URI(search.redirect_uri).hash(hash).toString();
             } else {
-              const accessToken = data.accessToken;
-              $.post('/linkedAccount', { accessToken: accessToken })
-                .done(function (data) {
-                  callback(null, { accessToken: accessToken, linkedAccount: data.linkedAccount });
-                });
+              callback(null, { accessToken: accessToken });
             }
           })
           .fail(function (jqXHR) {
@@ -148,6 +145,46 @@
           });
       }
     );
+
+    if (search.debug !== undefined) {
+      function debug(text, context) {
+        if (search.debug === undefined) {
+          return;
+        }
+        var element = $('#debug');
+        element.removeClass();
+        if (context) {
+          element.addClass('bg-' + context);
+        }
+        if (typeof text === 'object') {
+          text = JSON.stringify(text, null, 4);
+        }
+        element.text(text);
+      }
+      eventEmitter.on('submit', function () {
+        debug('...');
+      });
+      eventEmitter.on('handled', function (err, data) {
+        if (err) {
+          debug(err.jqXHR.responseText, 'danger');
+        } else {
+          var accessToken = data.accessToken;
+          $.post('/linkedAccount', { accessToken: accessToken })
+            .done(function (data) {
+              debug({ accessToken: accessToken, linkedAccount: data.linkedAccount }, 'success');
+            });
+        }
+      });
+      var element = $('#search');
+      element
+        .text(JSON.stringify(search, null, 4))
+        .removeClass();
+      if (search.redirect_uri && search.state) {
+        element.addClass('bg-success');
+      } else {
+        element.addClass('bg-warning');
+      }
+    }
   });
 </script>
 </body>
