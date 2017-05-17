@@ -96,11 +96,13 @@
       }
     }
 
-    var formSignin = dform('#formSignin');
+    var formSigninElement = $('#formSignin');
+    var formSignin = dform(formSigninElement);
 
     formSignin
       .on('submit', function () {
         $('#helpBlock').addClass('hidden');
+        formSigninElement.removeClass('has-error');
       })
       .on('fail', function (jqXHR) {
         let text;
@@ -109,6 +111,7 @@
         } else {
           text = 'Unbekannter Fehler, bitte versuchen Sie es später nochmal.';
         }
+        formSigninElement.addClass('has-error');
         $('#helpBlock')
           .text(text)
           .removeClass('hidden');
