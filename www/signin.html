@@ -119,11 +119,11 @@
 
     if (search.redirect_uri && search.state) {
       formSignin
-        .on('done', function (data) {
+        .on('done', function (responseData) {
           var hash = URI('')
             .search({
               state: search.state,
-              access_token: data.accessToken,
+              access_token: responseData.accessToken,
               token_type: 'Bearer'
             })
             .query();
@@ -151,11 +151,11 @@
         .on('submit', function () {
           debug('...');
         })
-        .on('done', function (data) {
-          var accessToken = data.accessToken;
+        .on('done', function (responseData) {
+          var accessToken = responseData.accessToken;
           $.post('/linkedAccount', { accessToken: accessToken })
-            .done(function (data) {
-              debug({ accessToken: accessToken, linkedAccount: data.linkedAccount }, 'success');
+            .done(function (responseData) {
+              debug({ accessToken: accessToken, linkedAccount: responseData.linkedAccount }, 'success');
             })
             .fail(function (jqXHR) {
               debug('/linkedAccount: ' + jqXHR.responseText, 'danger');
