@@ -199,10 +199,13 @@
           $.post('/linkedAccount', { accessToken: accessToken })
             .done(function (data) {
               debug({ accessToken: accessToken, linkedAccount: data.linkedAccount }, 'success');
+            })
+            .fail(function (jqXHR) {
+              debug('/linkedAccount: ' + jqXHR.responseText, 'danger');
             });
         })
         .on('fail', function (jqXHR) {
-          debug(jqXHR.responseText, 'danger');
+          debug('/signin: ' + jqXHR.responseText, 'danger');
         });
     }
   });
