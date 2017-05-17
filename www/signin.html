@@ -16,18 +16,22 @@
       padding-bottom: 40px;
       background-color: #eee;
     }
+
     .form-signin {
       max-width: 330px;
       padding: 15px;
       margin: 0 auto;
     }
+
     .form-signin .form-signin-heading,
     .form-signin {
       margin-bottom: 10px;
     }
+
     .form-signin .checkbox {
       font-weight: normal;
     }
+
     .form-signin .form-control {
       position: relative;
       height: auto;
@@ -37,14 +41,17 @@
       padding: 10px;
       font-size: 16px;
     }
+
     .form-signin .form-control:focus {
       z-index: 2;
     }
+
     .form-signin input[type="email"] {
       margin-bottom: -1px;
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
     }
+
     .form-signin input[type="password"] {
       margin-bottom: 10px;
       border-top-left-radius: 0;
@@ -159,8 +166,8 @@
     if (search.debug !== undefined) {
       var element = $('#search');
       element
-          .text(JSON.stringify(search, null, 4))
-          .removeClass();
+        .text(JSON.stringify(search, null, 4))
+        .removeClass();
       if (search.redirect_uri && search.state) {
         element.addClass('bg-success');
       } else {
