@@ -55,13 +55,13 @@
 <body>
 
 <div class="container">
-  <form id="form-signin" method="post" action="/signin" class="form-signin">
+  <form id="formSignin" method="post" action="/signin" class="form-signin">
     <h2 class="form-signin-heading">maxdome</h2>
     <label for="inputEmail" class="sr-only">E-Mail</label>
-    <input type="email" id="inputEmail" name="email" class="form-control" placeholder="E-Mail" value="asd@asd.de" required autofocus>
+    <input type="email" id="inputEmail" name="email" class="form-control" placeholder="E-Mail" required autofocus>
     <label for="inputPassword" class="sr-only">Passwort</label>
-    <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Passwort" value="asd" required>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Anmelden</button>
+    <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Passwort" required>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Authorisieren</button>
     <span id="helpBlock" class="help-block hidden"></span>
   </form>
   <pre id="search" class="hidden"></pre>
@@ -103,16 +103,12 @@
         }
         formData[name] = element.val();
       });
-      if (submitElement) {
-        submitElement.attr('disabled', 'disabled');
-      }
+      submitElement.attr('disabled', 'disabled');
       formElement.removeClass('has-error');
       eventEmitter.trigger('submit');
       $[formElement.attr('method')](formElement.attr('action'), formData)
           .always(function () {
-            if (submitElement) {
-              submitElement.removeAttr('disabled', 'disabled');
-            }
+            submitElement.removeAttr('disabled', 'disabled');
           })
           .done(function (data) {
             eventEmitter.trigger('done', data);
@@ -128,7 +124,7 @@
   $(function () {
     var search = URI().search(true);
 
-    var eventEmitter = formHandler('#form-signin');
+    var eventEmitter = formHandler('#formSignin');
 
     eventEmitter
       .on('submit', function () {
