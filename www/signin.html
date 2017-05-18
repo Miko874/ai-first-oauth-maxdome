@@ -81,14 +81,12 @@
 <script src="vendor/urijs/src/URI.min.js"></script>
 
 <script>
-  $(function () {
+  $(function() {
     var search = URI().search(true);
 
     if (search.debug !== undefined) {
       var element = $('#search');
-      element
-        .text(JSON.stringify(search, null, 4))
-        .removeClass();
+      element.text(JSON.stringify(search, null, 4)).removeClass();
       if (search.redirect_uri && search.state) {
         element.addClass('bg-success');
       } else {
@@ -100,11 +98,11 @@
     var formSignin = dform(formSigninElement);
 
     formSignin
-      .on('submit', function () {
+      .on('submit', function() {
         $('#helpBlock').addClass('hidden');
         formSigninElement.removeClass('has-error');
       })
-      .on('fail', function (jqXHR) {
+      .on('fail', function(jqXHR) {
         let text;
         if (jqXHR.status === 403) {
           text = 'E-Mail oder Passwort falsch.';
@@ -112,24 +110,21 @@
           text = 'Unbekannter Fehler, bitte versuchen Sie es später nochmal.';
         }
         formSigninElement.addClass('has-error');
-        $('#helpBlock')
-          .text(text)
-          .removeClass('hidden');
+        $('#helpBlock').text(text).removeClass('hidden');
       });
 
     if (search.redirect_uri && search.state) {
-      formSignin
-        .on('done', function (responseData) {
-          var hash = URI('')
-            .search({
-              state: search.state,
-              access_token: responseData.accessToken,
-              token_type: 'Bearer'
-            })
-            .query();
-          var location = URI(search.redirect_uri).hash(hash).toString();
-          window.location = location;
-        });
+      formSignin.on('done', function(responseData) {
+        var hash = URI('')
+          .search({
+            state: search.state,
+            access_token: responseData.accessToken,
+            token_type: 'Bearer',
+          })
+          .query();
+        var location = URI(search.redirect_uri).hash(hash).toString();
+        window.location = location;
+      });
     }
 
     if (search.debug !== undefined) {
@@ -148,20 +143,26 @@
         debugElement.text(text);
       }
       formSignin
-        .on('submit', function () {
+        .on('submit', function() {
           debug('...');
         })
-        .on('done', function (responseData) {
+        .on('done', function(responseData) {
           var accessToken = responseData.accessToken;
           $.post('/linkedAccount', { accessToken: accessToken })
-            .done(function (responseData) {
-              debug({ accessToken: accessToken, linkedAccount: responseData.linkedAccount }, 'success');
+            .done(function(responseData) {
+              debug(
+                {
+                  accessToken: accessToken,
+                  linkedAccount: responseData.linkedAccount,
+                },
+                'success'
+              );
             })
-            .fail(function (jqXHR) {
+            .fail(function(jqXHR) {
               debug('/linkedAccount: ' + jqXHR.responseText, 'danger');
             });
         })
-        .on('fail', function (jqXHR) {
+        .on('fail', function(jqXHR) {
           debug('/signin: ' + jqXHR.responseText, 'danger');
         });
     }
