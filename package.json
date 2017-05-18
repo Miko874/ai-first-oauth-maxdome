@@ -16,7 +16,8 @@
   },
   "readmeFilename": "README.md",
   "scripts": {
-    "lint": "eslint src",
+    "develop": "nodemon src/web.js",
+    "fmt": "dprettier",
     "postinstall": "bower i",
     "start": "node src/web.js"
   },
@@ -37,7 +38,7 @@
     "shortid": "^2.2.8"
   },
   "devDependencies": {
-    "eslint": "^3.15.0",
-    "eslint-config-dnode": "^1.11.0"
+    "dprettier": "^1.1.0",
+    "nodemon": "^1.11.0"
   }
 }
