@@ -2,7 +2,7 @@
   "private": true,
   "name": "ai-oauth-maxdome",
   "version": "1.0.0",
-  "description": "",
+  "description": "OAuth bridge for maxdome",
   "license": "UNLICENSED",
   "homepage": "http://github.com/dragonprojects/ai-oauth-maxdome",
   "author": {
