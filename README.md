@@ -33,9 +33,9 @@ const linkedAccount = {
 ```
 
 * `autoLoginPin`: Can be ignored, will be used by the service during the `/linkedAccount` to renew the session
-* `customerId` and `sessionId` are needed to make a sessioned Heimdall request
+* `customerId` and `sessionId` are needed to make a sessioned maxdome request
 
-## Use the `linkedAccount` for Heimdall requests, e.g. add an asset to the notepad
+## Use the `linkedAccount` for maxdome requests, e.g. add an asset to the notepad
 
 ```javascript
 const maxdome = require('drequest-maxdome').getRequestBuilder();
