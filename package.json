@@ -5,6 +5,8 @@
   "name": "@ai-first/ai-oauth-maxdome",
   "version": "1.0.0",
   "description": "",
+  "repository": "sharaal/ai-oauth-maxdome",
+  "license": "UNLICENSED",
   "publishConfig": {
     "access": "public"
   },
