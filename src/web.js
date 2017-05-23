@@ -18,6 +18,15 @@ const redis = require('@dnode/redis')(process.env.REDIS_URL);
 require('@dnode/controllers')(app, [
   require('./controllers/linkedAccount')({ maxdome, redis }),
   require('./controllers/signin')({ maxdome, redis }),
+  [
+    'get',
+    [
+      '/',
+      (req, res) => {
+        res.redirect('/signin');
+      },
+    ],
+  ],
 ]);
 
 if (module.parent) {
