@@ -3,10 +3,10 @@
   "engines": {
     "node": "^7.6.0"
   },
-  "name": "@ai-first/ai-oauth-maxdome",
+  "name": "@ai-first/oauth-maxdome",
   "version": "1.0.0",
   "description": "",
-  "repository": "sharaal/ai-oauth-maxdome",
+  "repository": "sharaal/ai-first-oauth-maxdome",
   "license": "UNLICENSED",
   "publishConfig": {
     "access": "public"
