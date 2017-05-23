@@ -1,4 +1,4 @@
-const SessionOptions = require('@dnode/request-maxdome').SessionOptions;
+const { SessionOptions } = require('@dnode/request-maxdome');
 
 module.exports = ({ maxdome, redis }) => [
   'post',
