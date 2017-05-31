@@ -10,7 +10,7 @@ module.exports = ({ maxdome, redis }) => [
         if (!accessToken) {
           throw new Error('missing accessToken');
         }
-        let linkedAccount = await redis.getJSON(accessToken);
+        let linkedAccount = await redis.getJSON(`LINKEDACCOUNT:${accessToken}`);
         if (!linkedAccount) {
           throw new Error('incorrect accessToken');
         }
@@ -28,7 +28,7 @@ module.exports = ({ maxdome, redis }) => [
             customer: { customerId: data.customer.customerId },
             sessionId: data.sessionId,
           };
-          await redis.setJSON(accessToken, linkedAccount);
+          await redis.setJSON(`LINKEDACCOUNT:${accessToken}`, linkedAccount);
         }
         res.status(200).send({ linkedAccount });
       } catch (e) {

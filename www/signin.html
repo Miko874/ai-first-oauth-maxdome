@@ -63,6 +63,7 @@
 
 <div class="container">
   <form id="formSignin" method="post" action="/signin" class="form-signin">
+    <input id="inputResponseType" type="hidden" name="response_type" value="">
     <h2 class="form-signin-heading">maxdome</h2>
     <label for="inputEmail" class="sr-only">E-Mail</label>
     <input type="email" id="inputEmail" name="email" class="form-control" placeholder="E-Mail" required autofocus>
@@ -97,6 +98,8 @@
     var formSigninElement = $('#formSignin');
     var formSignin = dform(formSigninElement);
 
+    $('#inputResponseType').val(search.response_type);
+
     formSignin
       .on('submit', function() {
         $('#helpBlock').addClass('hidden');
@@ -113,15 +116,23 @@
         $('#helpBlock').text(text).removeClass('hidden');
       });
 
-    if (search.redirect_uri && search.state) {
+    if (search.redirect_uri && search.response_type && search.state) {
       formSignin.on('done', function(responseData) {
-        var hash = URI('')
-          .search({
+        var params = {};
+        if (search.response_type === 'code') {
+          params = {
+            state: search.state,
+            code: responseData.code
+          };
+        }
+        if (search.response_type === 'token') {
+          params = {
             state: search.state,
             access_token: responseData.accessToken,
-            token_type: 'Bearer',
-          })
-          .query();
+            token_type: 'Bearer'
+          };
+        }
+        var hash = URI('').search(params).query();
         var location = URI(search.redirect_uri).hash(hash).toString();
         window.location = location;
       });
@@ -147,20 +158,36 @@
           debug('...');
         })
         .on('done', function(responseData) {
-          var accessToken = responseData.accessToken;
-          $.post('/linkedAccount', { accessToken: accessToken })
-            .done(function(responseData) {
-              debug(
-                {
-                  accessToken: accessToken,
-                  linkedAccount: responseData.linkedAccount,
-                },
-                'success'
-              );
-            })
-            .fail(function(jqXHR) {
-              debug('/linkedAccount: ' + jqXHR.responseText, 'danger');
-            });
+          function accessToken(accessToken, code, refreshToken) {
+            $.post('/linkedAccount', { accessToken: accessToken })
+              .done(function(responseData) {
+                debug(
+                  {
+                    accessToken: accessToken,
+                    code: code,
+                    linkedAccount: responseData.linkedAccount,
+                    refreshToken: refreshToken
+                  },
+                  'success'
+                );
+              })
+              .fail(function(jqXHR) {
+                debug('/linkedAccount: ' + jqXHR.responseText, 'danger');
+              });
+          }
+          if (search.response_type === 'code') {
+            var code = responseData.code;
+            $.post('/token', { code: code })
+              .done(function(responseData) {
+                accessToken(responseData.accessToken, code, responseData.refreshToken);
+              })
+              .fail(function(jqXHR) {
+                debug('/token: ' + jqXHR.responseText, 'danger');
+              });
+          }
+          if (search.response_type === 'token') {
+            accessToken(responseData.accessToken);
+          }
         })
         .on('fail', function(jqXHR) {
           debug('/signin: ' + jqXHR.responseText, 'danger');

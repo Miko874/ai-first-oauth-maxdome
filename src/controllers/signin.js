@@ -30,8 +30,15 @@ module.exports = ({ maxdome, redis }) => [
             customer: { customerId: data.customer.customerId },
             sessionId: data.sessionId,
           };
-          await redis.setJSON(accessToken, linkedAccount);
-          res.status(200).send({ accessToken });
+          await redis.setJSON(`LINKEDACCOUNT:${accessToken}`, linkedAccount);
+          if (req.body.response_type === 'code') {
+            const code = shortid.generate();
+            const refreshToken = shortid.generate();
+            await redis.setJSON(`TOKENS:${code}`, { accessToken, refreshToken });
+            res.status(200).send({ code });
+          } else {
+            res.status(200).send({ accessToken });
+          }
         } catch (e) {
           res.status(403).send(e.message);
         }
