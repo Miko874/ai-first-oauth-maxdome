@@ -158,15 +158,14 @@
           debug('...');
         })
         .on('done', function(responseData) {
-          function accessToken(accessToken, code, refreshToken) {
+          function accessToken(accessToken, code) {
             $.post('/linkedAccount', { accessToken: accessToken })
               .done(function(responseData) {
                 debug(
                   {
                     accessToken: accessToken,
                     code: code,
-                    linkedAccount: responseData.linkedAccount,
-                    refreshToken: refreshToken
+                    linkedAccount: responseData.linkedAccount
                   },
                   'success'
                 );
@@ -179,7 +178,7 @@
             var code = responseData.code;
             $.post('/token', { code: code })
               .done(function(responseData) {
-                accessToken(responseData.accessToken, code, responseData.refreshToken);
+                accessToken(responseData.accessToken, code);
               })
               .fail(function(jqXHR) {
                 debug('/token: ' + jqXHR.responseText, 'danger');
