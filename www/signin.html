@@ -183,9 +183,10 @@
               .fail(function(jqXHR) {
                 debug('/token: ' + jqXHR.responseText, 'danger');
               });
-          }
-          if (search.response_type === 'token') {
+          } else if (search.response_type === 'token') {
             accessToken(responseData.accessToken);
+          } else {
+            debug(responseData, 'success');
           }
         })
         .on('fail', function(jqXHR) {
