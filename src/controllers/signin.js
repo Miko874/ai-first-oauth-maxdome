@@ -33,8 +33,7 @@ module.exports = ({ maxdome, redis }) => [
           await redis.setJSON(`LINKEDACCOUNT:${accessToken}`, linkedAccount);
           if (req.body.response_type === 'code') {
             const code = shortid.generate();
-            const refreshToken = shortid.generate();
-            await redis.setJSON(`TOKENS:${code}`, { accessToken, refreshToken });
+            await redis.setJSON(`TOKENS:${code}`, { accessToken });
             res.status(200).send({ code });
           } else {
             res.status(200).send({ accessToken });
