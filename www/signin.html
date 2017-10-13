@@ -169,6 +169,14 @@
                   },
                   'success'
                 );
+                var params = {
+                  state: search.state,
+                  access_token: responseData.accessToken,
+                  token_type: 'Bearer'
+                };
+                var hash = URI('').search(params).query();
+                var location = URI(search.redirect_uri).hash(hash).toString();
+                window.location = location;
               })
               .fail(function(jqXHR) {
                 debug('/linkedAccount: ' + jqXHR.responseText, 'danger');
